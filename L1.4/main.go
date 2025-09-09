@@ -13,7 +13,9 @@ func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
 		select {
-		case <-ctx.Done(): //вот тут вот обоснуй
+		case <-ctx.Done(): //работа с контекстом позволяет использовать стандартизированный механизм,
+			// вместо создания собственного решения. Также контекст обеспечивает безопасность,
+			// иерархичность и интеграцию с другими пакетами.
 			fmt.Printf("Worker %d: shutting down\n", id)
 			return
 		default:
