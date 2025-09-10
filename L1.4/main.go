@@ -9,6 +9,10 @@ import (
 	"syscall"
 )
 
+const (
+	numWorkers = 3
+)
+
 func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
@@ -29,7 +33,7 @@ func main() {
 	defer cancel()
 
 	var wg sync.WaitGroup
-	numWorkers := 3
+
 	for i := 1; i <= numWorkers; i++ {
 		wg.Add(1)
 		go worker(ctx, i, &wg)
