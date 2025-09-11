@@ -15,6 +15,7 @@ func main() {
 	defer cancel()
 
 	var wg sync.WaitGroup
+
 	wg.Add(1)
 	go func(stopFlag *bool) { //по условию
 		defer wg.Done()
@@ -24,6 +25,7 @@ func main() {
 		}
 		fmt.Println("Worker 1 stoped.")
 	}(&stopFlag)
+
 	wg.Add(1)
 	go func(chan struct{}) { //через канал
 		defer wg.Done()
@@ -38,6 +40,7 @@ func main() {
 			}
 		}
 	}(stopChan)
+
 	wg.Add(1)
 	go func(ctx context.Context) { //через контекст
 		defer wg.Done()
@@ -52,6 +55,7 @@ func main() {
 			}
 		}
 	}(ctx)
+
 	wg.Add(1)
 	go func() { //через runtime.Goexit()
 		defer wg.Done()
@@ -66,8 +70,9 @@ func main() {
 			}
 		}
 	}()
+
 	wg.Add(1)
-	go func() { // Через контролируемую panic
+	go func() { // Через контролируемую panic, явно не классический, но горутину остановит
 		defer func() {
 			if r := recover(); r != nil {
 				fmt.Println("Worker 5 stopped.", r)
@@ -84,6 +89,7 @@ func main() {
 			}
 		}
 	}()
+
 	time.Sleep(3 * time.Second)
 	stopFlag = true
 	close(stopChan)
