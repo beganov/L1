@@ -11,13 +11,13 @@ type Cache struct {
 }
 
 func main() {
-	che := New()
+	cache := New()
 	var wg sync.WaitGroup
 	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			che.set(i)
+			cache.set(i)
 		}(i)
 	}
 	wg.Wait()
