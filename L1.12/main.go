@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-var array []string = []string{}
+var array []string = []string{"cat", "cat", "dog", "cat", "tree"}
 
 func main() {
 	var result []string
