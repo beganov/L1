@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	"strings"
 	"unsafe"
 )
@@ -34,7 +33,6 @@ func someFunc() {
 	fmt.Printf("original v string pointer: %p\n", vPtr)
 	fmt.Printf("justString pointer: %p\n", justStringPtr)     //как видно, оригинал и слайс ссылаются на одну область
 	fmt.Printf("alsoString pointer: %p\n", alsoJustStringPtr) //а clone нет
-	runtime.GC()
 }
 
 func main() {
