@@ -13,7 +13,7 @@ type TestStruct struct {
 
 func main() {
 	variables := []interface{}{
-		42,
+		52,
 		"hello",
 		true,
 		make(chan int),
