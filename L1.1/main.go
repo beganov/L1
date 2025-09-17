@@ -2,6 +2,13 @@ package main
 
 import "fmt"
 
+// L1.1
+// Дана структура Human (с произвольным набором полей и методов).
+// Реализовать встраивание методов в структуре Action от родительской
+// структуры Human (аналог наследования).
+// Подсказка: используйте композицию (embedded struct),
+// чтобы Action имел все методы Human.
+
 type Human struct {
 	age  int
 	name string
@@ -30,7 +37,7 @@ func main() {
 	act.name = "Slime shady"
 	act.duration = 1337
 
-	fmt.Println(act.GetAge())  // метод  Human
-	fmt.Println(act.GetName()) // метод Human
-	fmt.Println(act.duration)  // метод Action
+	fmt.Println(act.GetAge())  // метод от Human
+	fmt.Println(act.GetName()) // метод от Human
+	fmt.Println(act.duration)  // метод от Action
 }
