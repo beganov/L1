@@ -18,7 +18,5 @@ func main() {
 		}()
 	}
 	wg.Wait()
-
 	fmt.Println(counter.Load())
-
 }
