@@ -9,9 +9,7 @@ import (
 	"syscall"
 )
 
-const (
-	numWorkers = 3
-)
+var numWorkers = 3
 
 // L1.4
 // Программа должна корректно завершаться по нажатию Ctrl+C (SIGINT).
@@ -24,7 +22,8 @@ func worker(ctx context.Context, id int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for {
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done(): //остановка воркеров при завершении контекста
+
 			// работа с контекстом позволяет использовать стандартизированный механизм,
 			// вместо создания собственных решений. Также контекст обеспечивает
 			// безопасность, иерархичность и интеграцию с другими пакетами.
@@ -47,9 +46,11 @@ func main() {
 		go worker(ctx, i, &wg)
 	}
 
+	// настройка канала на регистрацию SIGINT и SIGTERM
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
+	// Ожидание либо сигнала, либо отмены контекста
 	select {
 	case sig := <-sigChan:
 		fmt.Printf("Caught signal: %s\n", sig)
