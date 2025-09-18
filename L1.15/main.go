@@ -6,8 +6,25 @@ import (
 	"unsafe"
 )
 
+// L1.15
+// Рассмотреть следующий код и ответить на вопросы:
+// к каким негативным последствиям он может привести и как это исправить?
+// (утечка памяти, исправить можно использованием функции Clone (или до Go 1.18 string([]byte(v[:100]))))
+// Приведите корректный пример реализации.
+// var justString string
+// func someFunc() {
+//   v := createHugeString(1 << 10)
+//   justString = v[:100]
+// }
+// func main() {
+//   someFunc()
+// }
+// Вопрос: что происходит с переменной justString?
+// (ссылается на ту же область памяти , что и исходная строка, GC не сможет очистить всю исходную строку)
+
 var justString string
 var alsoJustString string
+var alsoString string
 
 func someFunc() {
 	v := createHugeString(1 << 10)
@@ -25,14 +42,17 @@ func someFunc() {
 	// profiling indicates that it is needed.
 	// For strings of length zero the string "" will be returned
 	// and no allocation is made.
+	alsoString = string([]byte(v[:100])) //постфактум нашел такой вариант
 
 	justStringPtr := unsafe.StringData(justString)
 	alsoJustStringPtr := unsafe.StringData(alsoJustString)
+	alsoStringPtr := unsafe.StringData(alsoString)
 	vPtr := unsafe.StringData(v)
 
 	fmt.Printf("original v string pointer: %p\n", vPtr)
-	fmt.Printf("justString pointer: %p\n", justStringPtr)     //как видно, оригинал и слайс ссылаются на одну область
-	fmt.Printf("alsoString pointer: %p\n", alsoJustStringPtr) //а clone нет
+	fmt.Printf("justString pointer: %p\n", justStringPtr)         //как видно, оригинал и слайс ссылаются на одну область
+	fmt.Printf("alsoJustString pointer: %p\n", alsoJustStringPtr) //а clone нет
+	fmt.Printf("alsoString pointer: %p\n", alsoStringPtr)         //и string([]byte(v[:100])) тоже нет
 }
 
 func main() {
