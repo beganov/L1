@@ -10,6 +10,8 @@ import (
 // Подсказка: необходимость использования синхронизации (например, sync.Mutex или встроенная concurrent-map).
 // Проверьте работу кода на гонки (util go run -race).
 
+var lenArr = 10
+
 type Cache struct {
 	sync.Mutex // реализация через sync.Mutex
 	mapInt     map[int]int
@@ -18,7 +20,7 @@ type Cache struct {
 func main() {
 	cache := New()
 	var wg sync.WaitGroup
-	for i := 0; i < 10; i++ {
+	for i := 0; i < lenArr; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
@@ -29,7 +31,7 @@ func main() {
 }
 
 func New() *Cache {
-	return &Cache{mapInt: make(map[int]int, 10)}
+	return &Cache{mapInt: make(map[int]int, lenArr)}
 }
 
 func (c *Cache) set(i int) {
